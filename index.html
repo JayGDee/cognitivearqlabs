@@ -130,7 +130,8 @@ nav.scrolled{background:rgba(2,5,10,.82);backdrop-filter:blur(16px);border-botto
 @media(max-width:760px){.founder{grid-template-columns:1fr;text-align:center}}
 .avatar{aspect-ratio:1;border-radius:28px;border:1px solid var(--line);background:linear-gradient(145deg,#0a1626,#02050a);display:grid;place-items:center;position:relative;overflow:hidden}
 .avatar::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,rgba(79,195,247,.25),transparent 60%)}
-.avatar span{font-size:4.2rem;font-weight:700;letter-spacing:.04em;background:linear-gradient(135deg,var(--blue),var(--steel));-webkit-background-clip:text;background-clip:text;color:transparent;position:relative}
+.avatar picture,.avatar img{display:block;width:100%;height:100%;position:relative}
+.avatar img{object-fit:cover;object-position:center bottom}
 .founder h3{font-size:1.6rem}
 .founder .role{color:var(--blue);font-size:.88rem;letter-spacing:.12em;text-transform:uppercase;margin:4px 0 16px}
 .founder p{color:var(--muted);max-width:620px}
@@ -339,7 +340,12 @@ footer{padding:40px 0;border-top:1px solid var(--line);color:var(--muted);font-s
     <div class="kicker reveal">Leadership</div>
     <h2 class="reveal">Built from <span class="g">first principles.</span></h2>
     <div class="founder reveal">
-      <div class="avatar"><span>JD</span></div>
+      <div class="avatar">
+        <picture>
+          <source srcset="jason-davis.webp" type="image/webp">
+          <img src="jason-davis.png" alt="Jason Gabriel Davis, Founder and Lead Architect" width="520" height="520" loading="lazy">
+        </picture>
+      </div>
       <div>
         <h3>Jason Gabriel Davis</h3>
         <div class="role">Founder &amp; Lead Architect</div>
