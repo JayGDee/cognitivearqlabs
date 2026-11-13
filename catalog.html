@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discovery Catalog | Cognitive Arq Labs</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+    <div class="nav-container">
+        <a href="index.html" class="brand">COGNITIVE ARQ <span>LABS</span></a>
+        <nav>
+            <a href="index.html">Company</a>
+            <a href="index.html#episteme">Episteme</a>
+            <a href="index.html#offerings">Offerings</a>
+            <a href="catalog.html" class="active">Discovery Catalog</a>
+            <a href="index.html#team">Team</a>
+            <a href="login.html" class="btn btn-outline" id="navAuthBtn">Researcher Login</a>
+        </nav>
+    </div>
+</header>
+
+<section style="border-bottom: none;">
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+            <div>
+                <span class="section-label">Autonomous Discovery Vault</span>
+                <h1>Validated Hypothesis Catalog</h1>
+                <p style="max-width: 720px; margin-bottom: 0;">
+                    Every hypothesis below was autonomously synthesized by Episteme from corroborated multi-source facts in <code style="color: var(--accent);">sovereign.db</code> and verified through Z3 constraint and Red-Team gates.
+                </p>
+            </div>
+            <div id="sessionBanner"></div>
+        </div>
+
+        <!-- Search & Filter Controls -->
+        <div class="filter-bar">
+            <div class="form-group">
+                <label for="searchInput">Keyword Search (Title or Abstract)</label>
+                <input type="text" id="searchInput" class="form-control" placeholder="e.g., hypoxia, phononic, vitrimer...">
+            </div>
+            <div class="form-group">
+                <label for="domainFilter">Scientific Domain</label>
+                <select id="domainFilter" class="form-control">
+                    <option value="ALL">All Domains</option>
+                    <option value="Biology">Biology &amp; Biomedicine</option>
+                    <option value="Physics">Physics &amp; Quantum</option>
+                    <option value="Materials Science">Materials Science</option>
+                    <option value="Chemistry">Chemistry</option>
+                    <option value="Computer Science">Computer Science</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="dateFilter">Published After Date</label>
+                <input type="date" id="dateFilter" class="form-control">
+            </div>
+            <div>
+                <button class="btn btn-outline" onclick="resetFilters()" style="width: 100%;">Reset</button>
+            </div>
+        </div>
+
+        <div id="resultsCount" style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.25rem;"></div>
+
+        <!-- Catalog List -->
+        <div id="catalogContainer"></div>
+    </div>
+</section>
+
+<!-- Apply to Purchase Modal -->
+<div class="modal-backdrop" id="purchaseModal">
+    <div class="modal-box">
+        <span class="section-label">Institutional &amp; Lab Licensing</span>
+        <h3>Apply to Purchase Hypothesis</h3>
+        <p id="modalHypInfo" style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent);"></p>
+        <p style="font-size: 0.92rem;">
+            Licensing includes irrevocable rights to test, publish, and patent downstream discoveries, plus the complete machine-verifiable JSON/SQLite audit log.
+        </p>
+        <form id="purchaseForm" onsubmit="submitPurchaseApplication(event)">
+            <div class="form-group" style="margin-bottom: 1rem;">
+                <label>License Type</label>
+                <select id="licenseType" class="form-control">
+                    <option value="Non-Exclusive Dossier License (USD 2,500)">Non-Exclusive Dossier License (USD 2,500)</option>
+                    <option value="30-Day Exclusive Hold + Evaluation">30-Day Institutional Exclusivity Hold</option>
+                    <option value="Departmental Domain Subscription Inquiry">Departmental Domain Subscription Inquiry</option>
+                </select>
+            </div>
+            <div class="form-group" style="margin-bottom: 1rem;">
+                <label>Institution / Organization Name</label>
+                <input type="text" id="orgName" class="form-control" required placeholder="e.g., University of Toronto / BioLab Inc.">
+            </div>
+            <div class="form-group" style="margin-bottom: 1.25rem;">
+                <label>Notes or Grant Timeline (Optional)</label>
+                <textarea id="purchaseNotes" class="form-control" rows="3" placeholder="Briefly describe intended research or grant use..."></textarea>
+            </div>
+            <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+                <button type="button" class="btn btn-outline" onclick="closeModal()">Cancel</button>
+                <button type="submit" class="btn btn-emerald">Submit Licensing Application</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<footer>
+    Cognitive Arq Labs · Episteme™ Deterministic Discovery Architecture © 2026 Jason Gabriel Davis. All rights reserved. · <a href="mailto:davis.jason.g@gmail.com">Contact</a>
+</footer>
+
+<script src="hypotheses.js"></script>
+<script>
+    const isLoggedIn = localStorage.getItem('arq_logged_in') === 'true';
+    const userEmail = localStorage.getItem('arq_user_email') || 'researcher@institution.edu';
+    let selectedHypothesis = null;
+
+    // Update Nav & Banner based on login state
+    const navBtn = document.getElementById('navAuthBtn');
+    const banner = document.getElementById('sessionBanner');
+
+    if (isLoggedIn) {
+        navBtn.textContent = 'Log Out';
+        navBtn.href = '#';
+        navBtn.onclick = (e) => {
+            e.preventDefault();
+            localStorage.removeItem('arq_logged_in');
+            localStorage.removeItem('arq_user_email');
+            window.location.reload();
+        };
+        banner.innerHTML = `
+            <div style="background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.35); padding: 0.6rem 1rem; border-radius: 6px; font-size: 0.85rem;">
+                <strong style="color: var(--emerald);">Verified Access Active</strong><br>
+                <span style="color: var(--text-secondary); font-family: var(--font-mono);">${userEmail}</span>
+            </div>
+        `;
+    } else {
+        banner.innerHTML = `
+            <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 0.6rem 1rem; border-radius: 6px; font-size: 0.85rem;">
+                <span style="color: var(--text-secondary);">Viewing Public Abstracts Only</span><br>
+                <a href="login.html" style="font-weight: 600;">Log in to unlock full dossiers &rarr;</a>
+            </div>
+        `;
+    }
+
+    function renderCatalog() {
+        const query = document.getElementById('searchInput').value.toLowerCase().trim();
+        const domain = document.getElementById('domainFilter').value;
+        const afterDate = document.getElementById('dateFilter').value;
+
+        const filtered = HYPOTHESES_DATA.filter(item => {
+            const matchesQuery = !query ||
+                item.title.toLowerCase().includes(query) ||
+                item.abstract.toLowerCase().includes(query) ||
+                item.crossDomain.toLowerCase().includes(query);
+            const matchesDomain = domain === 'ALL' || item.domain === domain;
+            const matchesDate = !afterDate || item.date >= afterDate;
+            return matchesQuery && matchesDomain && matchesDate;
+        });
+
+        document.getElementById('resultsCount').textContent =
+            `Showing ${filtered.length} of ${HYPOTHESES_DATA.length} validated hypotheses`;
+
+        const container = document.getElementById('catalogContainer');
+        if (filtered.length === 0) {
+            container.innerHTML = `<div class="card"><p style="margin:0;">No hypotheses match your current filter criteria.</p></div>`;
+            return;
+        }
+
+        container.innerHTML = filtered.map(item => `
+            <article class="hypothesis-card">
+                <div class="meta-row">
+                    <span class="badge">${item.id}</span>
+                    <span class="badge">${item.domain} (${item.crossDomain})</span>
+                    <span class="badge badge-emerald">${item.sourcesCount} Verified Sources</span>
+                    <span class="badge badge-emerald">Red-Team Score: ${item.redTeamScore}/100</span>
+                    <span class="badge badge-amber">${item.status}</span>
+                    <span style="margin-left: auto; font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-secondary);">
+                        Date: ${item.date}
+                    </span>
+                </div>
+
+                <h3>${item.title}</h3>
+                <p><strong>Abstract:</strong> ${item.abstract}</p>
+
+                ${isLoggedIn ? `
+                    <div id="dossier-${item.id}" style="display: none;" class="full-dossier">
+                        <h4>Complete Mechanistic Hypothesis</h4>
+                        <p style="color: var(--text-primary);">${item.fullHypothesis}</p>
+
+                        <h4>Recommended Experimental Methodology</h4>
+                        <p>${item.methodology}</p>
+
+                        <h4>Statistical Power Analysis</h4>
+                        <p>${item.powerAnalysis}</p>
+
+                        <h4>Auditable Provenance Chain (Rule of Three)</h4>
+                        <ul class="provenance-list">
+                            ${item.provenance.map(src => `<li>${src}</li>`).join('')}
+                        </ul>
+
+Use code with caution.
+Full SQLite provenance log available upon license execution.
+
+
+Apply to Purchase Hypothesis
+
+
+View Complete Hypothesis
+
+
+:
+
+
+Full mechanism, experimental blueprint, power analysis, and source URLs require a verified researcher account.
+
+Log In to View Full Hypothesis
+
+} </article> ).join('');
+}
+function toggleDossier(id) {
+const box = document.getElementById(dossier-${id});
+const btn = document.getElementById(toggle-btn-${id});
+if (box.style.display === 'none') {
+box.style.display = 'block';
+btn.textContent = 'Hide Complete Hypothesis';
+btn.classList.remove('btn-primary');
+btn.classList.add('btn-outline');
+} else {
+box.style.display = 'none';
+btn.textContent = 'View Complete Hypothesis';
+btn.classList.remove('btn-outline');
+btn.classList.add('btn-primary');
+}
+}
+function resetFilters() {
+document.getElementById('searchInput').value = '';
+document.getElementById('domainFilter').value = 'ALL';
+document.getElementById('dateFilter').value = '';
+renderCatalog();
+}
+function openPurchaseModal(id) {
+selectedHypothesis = HYPOTHESES_DATA.find(h => h.id === id);
+document.getElementById('modalHypInfo').textContent = ${selectedHypothesis.id}: ${selectedHypothesis.title};
+document.getElementById('purchaseModal').classList.add('open');
+}
+function closeModal() {
+document.getElementById('purchaseModal').classList.remove('open');
+}
+function submitPurchaseApplication(e) {
+e.preventDefault();
+const license = document.getElementById('licenseType').value;
+const org = document.getElementById('orgName').value;
+const notes = document.getElementById('purchaseNotes').value;
+const subject = encodeURIComponent(Hypothesis License Application: ${selectedHypothesis.id});
+const body = encodeURIComponent(
+Hypothesis ID: ${selectedHypothesis.id}\n +
+Title: ${selectedHypothesis.title}\n +
+Applicant Email: ${userEmail}\n +
+Institution/Organization: ${org}\n +
+Requested License: ${license}\n +
+Notes: ${notes}
+);
+window.location.href = mailto:davis.jason.g@://gmail.com{subject}&body=${body};
+closeModal();
+}
+document.getElementById('searchInput').addEventListener('input', renderCatalog);
+document.getElementById('domainFilter').addEventListener('change', renderCatalog);
+document.getElementById('dateFilter').addEventListener('change', renderCatalog);
+renderCatalog();
+
+
+
+---
+
+### 5. `login.html`
+Your **Researcher Login & Institutional Access Portal**. It allows approved researchers to log in (unlocking `catalog.html`), and includes an **"Apply for Researcher Account"** form that sends institutional verification requests straight to your email.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Researcher Portal Login | Cognitive Arq Labs</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+    <div class="nav-container">
+        <a href="index.html" class="brand">COGNITIVE ARQ <span>LABS</span></a>
+        <nav>
+            <a href="index.html">Company</a>
+            <a href="index.html#episteme">Episteme</a>
+            <a href="index.html#offerings">Offerings</a>
+            <a href="catalog.html">Discovery Catalog</a>
+            <a href="index.html#team">Team</a>
+            <a href="login.html" class="btn btn-outline active">Researcher Login</a>
+        </nav>
+    </div>
+</header>
+
+<div class="container">
+    <div class="auth-wrapper">
+        <span class="section-label">Discovery Vault Access</span>
+        <h2 style="margin-bottom: 0.5rem;">Researcher Portal</h2>
+        <p style="font-size: 0.92rem; margin-bottom: 1.5rem;">
+            Sign in with your approved institutional credentials to inspect complete hypotheses, statistical power analyses, and URL provenance chains.
+        </p>
+
+        <!-- Login Form -->
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group" style="margin-bottom: 1rem;">
+                <label for="email">Institutional Email</label>
+                <input type="email" id="email" class="form-control" required placeholder="name@university.edu">
+            </div>
+            <div class="form-group" style="margin-bottom: 1.25rem;">
+                <label for="accessCode">Researcher Access Key / Password</label>
+                <input type="password" id="accessCode" class="form-control" required placeholder="••••••••••••">
+            </div>
+            <div id="loginError" style="color: #f87171; font-size: 0.85rem; margin-bottom: 1rem; display: none;"></div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Log In to Discovery Vault</button>
+        </form>
+
+        <!-- Preview / Demo Notice (Remove once connected to Supabase Auth) -->
+        <div style="margin-top: 1.25rem; padding: 0.85rem; background: var(--bg-secondary); border: 1px dashed var(--border-color); border-radius: 6px; font-size: 0.82rem; color: var(--text-secondary);">
+            <strong style="color: var(--accent);">Preview Mode:</strong> Enter any email and access key <code style="color: var(--emerald);">EPISTEME2026</code> to preview the unlocked researcher view.
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1.75rem 0;">
+
+        <!-- Request Account Section -->
+        <div>
+            <h3 style="font-size: 1.05rem;">Need a Researcher Account?</h3>
+            <p style="font-size: 0.88rem;">
+                Full dossier access is granted to verified university Principal Investigators, clinical fellows, research development offices, and biotech R&amp;D teams.
+            </p>
+            <button class="btn btn-outline" style="width: 100%;" onclick="toggleRequestForm()">
+                Request Researcher Access
+            </button>
+
+            <form id="requestForm" onsubmit="handleAccessRequest(event)" style="display: none; margin-top: 1.25rem;">
+                <div class="form-group" style="margin-bottom: 0.85rem;">
+                    <label>Full Name &amp; Title</label>
+                    <input type="text" id="reqName" class="form-control" required placeholder="Dr. Jane Smith, Assistant Professor">
+                </div>
+                <div class="form-group" style="margin-bottom: 0.85rem;">
+                    <label>Institutional / Corporate Email</label>
+                    <input type="email" id="reqEmail" class="form-control" required placeholder="jsmith@university.edu">
+                </div>
+                <div class="form-group" style="margin-bottom: 0.85rem;">
+                    <label>Primary Research Domain</label>
+                    <input type="text" id="reqDomain" class="form-control" required placeholder="e.g., Oncology, Quantum Materials">
+                </div>
+                <button type="submit" class="btn btn-emerald" style="width: 100%;">Submit Access Request</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<footer>
+    Cognitive Arq Labs · Episteme™ Deterministic Discovery Architecture © 2026 Jason Gabriel Davis. All rights reserved. · <a href="mailto:davis.jason.g@gmail.com">Contact</a>
+</footer>
+
+<script>
+    // Replace this client-side check with Supabase Auth when connecting your live database
+    const DEMO_ACCESS_KEY = "EPISTEME2026";
+
+    function handleLogin(e) {
+        e.preventDefault();
+        const email = document.getElementById('email').value.trim();
+        const code = document.getElementById('accessCode').value.trim();
+        const errBox = document.getElementById('loginError');
+
+        if (code === DEMO_ACCESS_KEY) {
+            localStorage.setItem('arq_logged_in', 'true');
+            localStorage.setItem('arq_user_email', email);
+            window.location.href = 'catalog.html';
+        } else {
+            errBox.textContent = "Invalid access key. Use EPISTEME2026 for preview mode, or request an institutional account below.";
+            errBox.style.display = 'block';
+        }
+    }
+
+    function toggleRequestForm() {
+        const form = document.getElementById('requestForm');
+        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function handleAccessRequest(e) {
+        e.preventDefault();
+        const name = document.getElementById('reqName').value;
+        const email = document.getElementById('reqEmail').value;
+        const domain = document.getElementById('reqDomain').value;
+
+        const subject = encodeURIComponent(`Researcher Vault Access Request: ${name}`);
+        const body = encodeURIComponent(
+            `Name & Title: ${name}\n` +
+            `Institutional Email: ${email}\n` +
+            `Primary Domain: ${domain}\n\n` +
+            `Please review and issue Discovery Vault credentials.`
+        );
+        window.location.href = `mailto:davis.jason.g@://gmail.com{subject}&body=${body}`;
+    }
+</script>
+</body>
+</html>
