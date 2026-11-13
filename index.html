@@ -1,202 +1,417 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cognitive Arq Labs | Verified Machine Cognition for Scientific Discovery</title>
-    <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cognitive Arq Labs | Verified Machine Cognition for Scientific Discovery</title>
+<meta name="description" content="Cognitive Arq Labs builds verifiable, privacy-first cognitive systems that generate traceable scientific hypotheses. Home of Episteme.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<style>
+:root{
+  --bg:#02050a; --bg2:#050a12; --card:rgba(10,18,30,.7); --line:rgba(120,170,220,.14);
+  --text:#eef4fa; --muted:#8ea4ba; --blue:#4fc3f7; --blue2:#1e88e5; --deep:#0d47a1;
+  --steel:#a9bdd3; --steel2:#5f7388; --max:1160px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.7;overflow-x:hidden}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 28px}
+a{color:var(--blue)}
+section{padding:110px 0;position:relative}
+.kicker{display:flex;align-items:center;gap:12px;color:var(--blue);text-transform:uppercase;letter-spacing:.22em;font-size:.74rem;font-weight:600;margin-bottom:18px}
+.kicker::before{content:"";width:34px;height:1px;background:linear-gradient(90deg,transparent,var(--blue))}
+h2{font-size:clamp(1.9rem,3.6vw,2.8rem);line-height:1.12;font-weight:700;letter-spacing:-.02em;max-width:820px}
+h2 .g{background:linear-gradient(90deg,var(--blue),var(--blue2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--muted);font-size:1.1rem;max-width:720px;margin-top:20px}
+.grid{display:grid;gap:22px;margin-top:54px}
+.g3{grid-template-columns:repeat(3,1fr)}.g2{grid-template-columns:repeat(2,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:960px){.g4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:820px){.g3,.g2,.g4{grid-template-columns:1fr}section{padding:80px 0}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px;backdrop-filter:blur(6px);transition:.35s;position:relative;overflow:hidden}
+.card::after{content:"";position:absolute;inset:0;background:radial-gradient(400px 160px at var(--mx,50%) -20%,rgba(79,195,247,.14),transparent 70%);opacity:0;transition:.35s;pointer-events:none}
+.card:hover{border-color:rgba(79,195,247,.45);transform:translateY(-4px)}
+.card:hover::after{opacity:1}
+.card .ico{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(79,195,247,.2),rgba(30,136,229,.08));border:1px solid rgba(79,195,247,.3);margin-bottom:20px}
+.card .ico svg{width:22px;height:22px;stroke:var(--blue);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.card h3{font-size:1.14rem;margin-bottom:10px}
+.card p{color:var(--muted);font-size:.96rem}
+.num{font-size:.75rem;color:var(--blue);letter-spacing:.18em;font-weight:600;margin-bottom:14px;display:block}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;transition:.3s}
+nav.scrolled{background:rgba(2,5,10,.82);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.nav-in{max-width:var(--max);margin:0 auto;padding:16px 28px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--text)}
+.brand svg{width:50px;height:34px}
+.brand .wm{display:flex;flex-direction:column;line-height:1}
+.brand .wm b{font-size:.98rem;letter-spacing:.34em;font-weight:600}
+.brand .wm i{font-style:normal;font-size:.62rem;letter-spacing:.5em;color:var(--blue);margin-top:6px}
+.links{display:flex;align-items:center;gap:30px}
+.links a{color:var(--muted);text-decoration:none;font-size:.9rem;transition:.2s}
+.links a:hover{color:var(--text)}
+.links .pill{color:#00131f;background:linear-gradient(135deg,var(--blue),var(--blue2));padding:9px 20px;border-radius:999px;font-weight:600}
+.links .pill:hover{color:#00131f;filter:brightness(1.12)}
+@media(max-width:860px){.links a:not(.pill){display:none}}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;padding:130px 0 90px;overflow:hidden;border-bottom:1px solid var(--line)}
+#net{position:absolute;inset:0;width:100%;height:100%;opacity:.75}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(900px 600px at 72% 45%,rgba(30,136,229,.22),transparent 65%),radial-gradient(600px 400px at 10% 90%,rgba(79,195,247,.08),transparent 60%);pointer-events:none}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center;position:relative;z-index:2}
+@media(max-width:940px){.hero-grid{grid-template-columns:1fr;text-align:center}.hero-art{order:-1;max-width:340px;margin:0 auto}.hero .cta{justify-content:center}.hero .lead{margin-left:auto;margin-right:auto}.hero .kicker{justify-content:center}}
+.hero h1{font-size:clamp(2.3rem,5.4vw,4.2rem);line-height:1.06;letter-spacing:-.03em;font-weight:700}
+.hero h1 .g{background:linear-gradient(95deg,var(--blue) 10%,#9fe0ff 50%,var(--blue2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.cta{display:flex;gap:14px;margin-top:38px;flex-wrap:wrap}
+.btn{display:inline-block;padding:15px 30px;border-radius:999px;text-decoration:none;font-weight:600;font-size:.96rem;transition:.25s}
+.btn-p{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#00131f;box-shadow:0 0 34px rgba(79,195,247,.28)}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 0 50px rgba(79,195,247,.45)}
+.btn-g{border:1px solid var(--line);color:var(--text)}
+.btn-g:hover{border-color:var(--blue);color:var(--blue)}
+.hero-art svg{width:100%;height:auto;overflow:visible}
+
+/* LOGO ANIMATION */
+.orb-core{animation:pulse 3.2s ease-in-out infinite;transform-origin:center;transform-box:fill-box}
+.orb-halo{animation:halo 3.2s ease-in-out infinite;transform-origin:center;transform-box:fill-box}
+.ring{transform-origin:150px 150px;animation:spin 26s linear infinite}
+.ring2{transform-origin:150px 150px;animation:spin 40s linear infinite reverse}
+.sat{transform-origin:150px 150px;animation:spin 9s linear infinite}
+.float{animation:float 7s ease-in-out infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.14)}}
+@keyframes halo{0%,100%{transform:scale(1);opacity:.55}50%{transform:scale(1.5);opacity:.9}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+/* STATS */
+.stats{padding:0;border-bottom:1px solid var(--line);background:var(--bg2)}
+.stats .wrap{display:grid;grid-template-columns:repeat(4,1fr)}
+.stat{padding:44px 24px;border-right:1px solid var(--line);text-align:center}
+.stat:last-child{border-right:0}
+.stat b{display:block;font-size:2.2rem;font-weight:700;background:linear-gradient(135deg,var(--blue),var(--steel));-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat span{color:var(--muted);font-size:.86rem}
+@media(max-width:760px){.stats .wrap{grid-template-columns:repeat(2,1fr)}.stat:nth-child(2){border-right:0}.stat:nth-child(-n+2){border-bottom:1px solid var(--line)}}
+
+/* EPISTEME */
+.ep{background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);overflow:hidden}
+.ep::before{content:"";position:absolute;right:-200px;top:-100px;width:700px;height:700px;background:radial-gradient(circle,rgba(30,136,229,.16),transparent 65%)}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;position:relative}
+@media(max-width:900px){.split{grid-template-columns:1fr;gap:40px}}
+.checks{list-style:none;margin-top:28px}
+.checks li{padding:12px 0 12px 34px;position:relative;color:var(--muted);border-bottom:1px solid var(--line)}
+.checks li b{color:var(--text)}
+.checks li::before{content:"";position:absolute;left:0;top:19px;width:16px;height:16px;border-radius:50%;border:1.5px solid var(--blue);background:radial-gradient(circle,var(--blue) 30%,transparent 35%)}
+.arch{display:flex;flex-direction:column;gap:14px}
+.layer{border:1px solid var(--line);border-radius:16px;padding:20px 24px;background:rgba(5,10,18,.8);position:relative}
+.layer small{color:var(--blue);letter-spacing:.18em;text-transform:uppercase;font-size:.68rem;font-weight:600}
+.layer h4{font-size:1.02rem;margin:4px 0}
+.layer p{color:var(--muted);font-size:.88rem}
+.layer.core{border-color:rgba(79,195,247,.55);box-shadow:0 0 40px rgba(79,195,247,.12) inset}
+.arrow{align-self:center;color:var(--blue);font-size:1.1rem;opacity:.7}
+
+/* PIPELINE */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:60px;position:relative}
+.steps::before{content:"";position:absolute;left:12.5%;right:12.5%;top:27px;height:1px;background:linear-gradient(90deg,var(--blue),var(--steel2))}
+.step{text-align:center;padding:0 16px;position:relative}
+.dot{width:54px;height:54px;border-radius:50%;margin:0 auto 20px;display:grid;place-items:center;background:var(--bg);border:1px solid var(--blue);color:var(--blue);font-weight:700;box-shadow:0 0 24px rgba(79,195,247,.25)}
+.step h3{font-size:1.05rem;margin-bottom:8px}
+.step p{color:var(--muted);font-size:.9rem}
+@media(max-width:820px){.steps{grid-template-columns:1fr;gap:34px}.steps::before{display:none}}
+
+/* ROADMAP */
+.road{margin-top:56px;position:relative}
+.road::before{content:"";position:absolute;left:11px;top:6px;bottom:6px;width:1px;background:linear-gradient(var(--blue),var(--steel2))}
+.rm{position:relative;padding:0 0 38px 52px}
+.rm::before{content:"";position:absolute;left:3px;top:6px;width:17px;height:17px;border-radius:50%;background:var(--bg);border:2px solid var(--blue);box-shadow:0 0 14px rgba(79,195,247,.5)}
+.rm small{color:var(--blue);letter-spacing:.16em;font-size:.72rem;font-weight:600;text-transform:uppercase}
+.rm h3{font-size:1.2rem;margin:4px 0 6px}
+.rm p{color:var(--muted);max-width:640px}
+
+/* FOUNDER */
+.founder{display:grid;grid-template-columns:260px 1fr;gap:54px;align-items:center;margin-top:54px}
+@media(max-width:760px){.founder{grid-template-columns:1fr;text-align:center}}
+.avatar{aspect-ratio:1;border-radius:28px;border:1px solid var(--line);background:linear-gradient(145deg,#0a1626,#02050a);display:grid;place-items:center;position:relative;overflow:hidden}
+.avatar::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,rgba(79,195,247,.25),transparent 60%)}
+.avatar picture,.avatar img{display:block;width:100%;height:100%;position:relative}
+.avatar img{object-fit:cover;object-position:center bottom}
+.founder h3{font-size:1.6rem}
+.founder .role{color:var(--blue);font-size:.88rem;letter-spacing:.12em;text-transform:uppercase;margin:4px 0 16px}
+.founder p{color:var(--muted);max-width:620px}
+
+/* CONTACT */
+.contact{text-align:center;overflow:hidden;border-top:1px solid var(--line)}
+.contact::before{content:"";position:absolute;left:50%;top:50%;width:900px;height:500px;transform:translate(-50%,-50%);background:radial-gradient(ellipse,rgba(30,136,229,.2),transparent 65%)}
+.contact .wrap{position:relative}
+.contact .kicker{justify-content:center}
+.contact h2,.contact .lead{margin-left:auto;margin-right:auto}
+footer{padding:40px 0;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}
+.foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;align-items:center}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .8s ease,transform .8s ease}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+</style>
 </head>
 <body>
 
-<header>
-    <div class="nav-container">
-        <a href="index.html" class="brand">COGNITIVE ARQ <span>LABS</span></a>
-        <nav>
-            <a href="index.html" class="active">Company</a>
-            <a href="index.html#episteme">Episteme</a>
-            <a href="index.html#offerings">Offerings</a>
-            <a href="catalog.html">Discovery Catalog</a>
-            <a href="index.html#team">Team</a>
-            <a href="login.html" class="btn btn-outline" id="navAuthBtn">Researcher Login</a>
-        </nav>
+<!-- Shared logo gradients -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="gC" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#0d47a1"/><stop offset=".55" stop-color="#1e88e5"/><stop offset="1" stop-color="#6fd6ff"/></linearGradient>
+    <linearGradient id="gA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e6eef7"/><stop offset=".5" stop-color="#a9bdd3"/><stop offset="1" stop-color="#4a5d72"/></linearGradient>
+    <radialGradient id="gO"><stop offset="0" stop-color="#e8fbff"/><stop offset=".45" stop-color="#6fd6ff"/><stop offset="1" stop-color="#1e88e5"/></radialGradient>
+    <radialGradient id="gH"><stop offset="0" stop-color="#4fc3f7" stop-opacity=".9"/><stop offset="1" stop-color="#4fc3f7" stop-opacity="0"/></radialGradient>
+  </defs>
+</svg>
+
+<nav id="nav">
+  <div class="nav-in">
+    <a class="brand" href="#top" aria-label="Cognitive Arq Labs">
+      <svg viewBox="0 0 460 300" aria-hidden="true">
+        <path d="M236 90 A105 105 0 1 0 236 210" fill="none" stroke="url(#gC)" stroke-width="40"/>
+        <path d="M335 14 L440 270 L396 270 L318 78 Z" fill="url(#gA)"/>
+        <path d="M296 150 L322 186 L286 270 L244 270 Z" fill="url(#gA)"/>
+        <circle cx="150" cy="150" r="24" fill="url(#gO)"/>
+      </svg>
+      <span class="wm"><b>COGNITIVE</b><i>ARQ LABS</i></span>
+    </a>
+    <div class="links">
+      <a href="#company">Company</a>
+      <a href="#episteme">Episteme</a>
+      <a href="#offer">Offerings</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="#team">Team</a>
+      <a class="pill" href="#contact">Partner With Us</a>
     </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <canvas id="net"></canvas>
+  <div class="wrap hero-grid">
+    <div>
+      <div class="kicker">Cognitive Arq Labs</div>
+      <h1>Machine cognition you can <span class="g">verify, trace, and trust.</span></h1>
+      <p class="lead">We build private, auditable cognitive systems that read the world's scientific literature, form testable hypotheses, and show their reasoning at every step. Discovery, with provenance.</p>
+      <div class="cta">
+        <a class="btn btn-p" href="#contact">Partner With Us</a>
+        <a class="btn btn-g" href="#company">Explore the Company</a>
+      </div>
+    </div>
+
+    <!-- Animated hero mark -->
+    <div class="hero-art float">
+      <svg viewBox="-40 -30 500 360" role="img" aria-label="Cognitive Arq Labs mark">
+        <g class="ring2" opacity=".35"><circle cx="150" cy="150" r="165" fill="none" stroke="#4fc3f7" stroke-width=".8" stroke-dasharray="3 9"/></g>
+        <g class="ring" opacity=".5"><circle cx="150" cy="150" r="140" fill="none" stroke="#a9bdd3" stroke-width=".8" stroke-dasharray="1 5"/></g>
+        <g class="sat"><circle cx="150" cy="10" r="4" fill="#6fd6ff"/></g>
+        <circle class="orb-halo" cx="150" cy="150" r="52" fill="url(#gH)"/>
+        <path d="M236 90 A105 105 0 1 0 236 210" fill="none" stroke="url(#gC)" stroke-width="40"/>
+        <path d="M335 14 L440 270 L396 270 L318 78 Z" fill="url(#gA)"/>
+        <path d="M296 150 L322 186 L286 270 L244 270 Z" fill="url(#gA)"/>
+        <circle class="orb-core" cx="150" cy="150" r="24" fill="url(#gO)"/>
+      </svg>
+    </div>
+  </div>
 </header>
 
-<!-- Hero -->
-<section>
-    <div class="container">
-        <span class="section-label">Deterministic Neuro-Symbolic Architecture</span>
-        <h1>Machine cognition you can verify, trace, and trust.</h1>
-        <p style="max-width: 720px; font-size: 1.15rem;">
-            We build private, auditable cognitive systems that continuously read the world's scientific literature, form testable cross-domain hypotheses, and show their reasoning at every step. Discovery, with provenance.
-        </p>
-        <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
-            <a href="catalog.html" class="btn btn-primary">Browse Discovery Catalog</a>
-            <a href="#episteme" class="btn btn-outline">Explore the Engine</a>
-        </div>
+<div class="stats">
+  <div class="wrap">
+    <div class="stat"><b>500K+</b><span>Source-verified facts & growing</span></div>
+    <div class="stat"><b>24</b><span>Knowledge domains & expanding</span></div>
+    <div class="stat"><b>100%</b><span>Local &amp; encrypted</span></div>
+    <div class="stat"><b>3</b><span>Independent sources per fact</span></div>
+  </div>
+</div>
 
-        <div class="stats-grid">
-            <div class="stat-box">
-                <strong>505K+</strong>
-                <span>Source-verified facts &amp; growing</span>
-            </div>
-            <div class="stat-box">
-                <strong>24</strong>
-                <span>Knowledge domains &amp; expanding</span>
-            </div>
-            <div class="stat-box">
-                <strong>100%</strong>
-                <span>Local &amp; encrypted memory</span>
-            </div>
-            <div class="stat-box">
-                <strong>3x</strong>
-                <span>Independent sources per fact</span>
-            </div>
-        </div>
+<section id="company">
+  <div class="wrap">
+    <div class="kicker reveal">The Company</div>
+    <h2 class="reveal">Science produces more than any <span class="g">human mind can hold.</span></h2>
+    <p class="lead reveal">Biomedicine alone publishes over a million papers a year. The connections that lead to breakthroughs often sit between disciplines, where no single researcher has the reach to see them. Cognitive Arq Labs exists to close that gap with systems whose conclusions can be checked.</p>
+
+    <div class="grid g3">
+      <div class="card reveal">
+        <div class="ico"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.5-4.5"/></svg></div>
+        <h3>Discovery</h3>
+        <p>Cross-domain hypothesis generation grounded in verified knowledge, aimed at problems that remain open.</p>
+      </div>
+      <div class="card reveal">
+        <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></div>
+        <h3>Verification</h3>
+        <p>Every claim carries provenance. Every hypothesis faces adversarial review before it reaches a researcher.</p>
+      </div>
+      <div class="card reveal">
+        <div class="ico"><svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg></div>
+        <h3>Privacy</h3>
+        <p>Systems run locally with encrypted memory. No cloud dependency and no data harvesting.</p>
+      </div>
     </div>
+
+    <div class="grid g4" style="margin-top:22px">
+      <div class="card reveal"><span class="num">FOR RESEARCHERS</span><p>Months of literature review compressed into hours, with full reasoning trails.</p></div>
+      <div class="card reveal"><span class="num">FOR INSTITUTIONS</span><p>Priority access to novel hypotheses in your field before they reach the wider market.</p></div>
+      <div class="card reveal"><span class="num">FOR INDUSTRY</span><p>Target identification and materials exploration with auditable evidence.</p></div>
+      <div class="card reveal"><span class="num">FOR INDIVIDUALS</span><p>A long-term vision of a private personal cognitive partner that stays on your device.</p></div>
+    </div>
+  </div>
 </section>
 
-<!-- The Company -->
-<section>
-    <div class="container">
-        <span class="section-label">The Company</span>
-        <h2>Science produces more than any human mind can hold.</h2>
-        <p style="max-width: 760px;">
-            Biomedicine alone publishes over a million papers a year. The connections that lead to breakthroughs often sit between disciplines, where no single researcher has the reach to see them. Cognitive Arq Labs closes that gap with autonomous systems whose conclusions can be mathematically and bibliographically audited.
-        </p>
-
-        <div class="grid-3">
-            <div class="card">
-                <h3>Autonomous Discovery</h3>
-                <p>Cross-domain hypothesis generation grounded in verified knowledge, surfacing novel mechanisms across disparate fields without prompt bias.</p>
-            </div>
-            <div class="card">
-                <h3>Strict Verification</h3>
-                <p>Every premise carries multi-source provenance. Every hypothesis survives adversarial Red-Team review and formal constraint checks before catalog publication.</p>
-            </div>
-            <div class="card">
-                <h3>Air-Gapped Privacy</h3>
-                <p>Systems run locally with encrypted SQLCipher memory. Zero cloud dependency, zero prompt contamination, and zero data harvesting.</p>
-            </div>
-        </div>
+<section class="ep" id="episteme">
+  <div class="wrap split">
+    <div>
+      <div class="kicker reveal">The Engine</div>
+      <h2 class="reveal">Episteme, our <span class="g">artificial cognitive process.</span></h2>
+      <p class="lead reveal">Episteme is not a chatbot. She is a persistent system with continuous memory, a structured worldview, and an intrinsic curiosity engine that directs her own inquiry. She is the core of everything we do.</p>
+      <ul class="checks reveal">
+        <li><b>Persistent.</b> Learns a fact today, uses it tomorrow. No retraining cycle.</li>
+        <li><b>Autonomous.</b> Explores and synthesizes without waiting for a prompt.</li>
+        <li><b>Self-correcting.</b> Traces a failed hypothesis to the flawed assumption and records it.</li>
+        <li><b>Auditable.</b> Beliefs carry confidence scores and full provenance.</li>
+      </ul>
     </div>
+    <div class="arch reveal">
+      <div class="layer"><small>Language layer</small><h4>The Mouth</h4><p>A bounded language model that reads and writes text. It does not decide what is true.</p></div>
+      <div class="arrow">&#9660; passes through deterministic gates &#9660;</div>
+      <div class="layer core"><small>Authority layer</small><h4>The Brain: Deterministic Neuro-Symbolic Orchestration</h4><p>A Python and SQLite pipeline holds all logic, memory, and validation. Nothing enters the knowledge base without passing it.</p></div>
+      <div class="arrow">&#9660;</div>
+      <div class="layer"><small>Memory</small><h4>Encrypted, source-linked knowledge</h4><p>Verified facts are kept apart from unverified claims and hypotheses.</p></div>
+    </div>
+  </div>
 </section>
 
-<!-- Episteme Architecture -->
-<section id="episteme">
-    <div class="container">
-        <span class="section-label">The Engine</span>
-        <h2>Episteme, our deterministic discovery architecture.</h2>
-        <p style="max-width: 760px;">
-            Episteme is not a chatbot or a prompt-driven agent. She is a persistent, autonomous cognitive pipeline governed by Deterministic Neuro-Symbolic Orchestration (DNSO).
-        </p>
-
-        <div class="grid-4" style="margin-bottom: 2.5rem;">
-            <div class="card">
-                <h3>Persistent</h3>
-                <p>Learns a verified fact today and synthesizes across it tomorrow—no multi-million-dollar retraining cycle.</p>
-            </div>
-            <div class="card">
-                <h3>Autonomous</h3>
-                <p>Explores and synthesizes continuously via a deterministic Arbiter without waiting for human prompts.</p>
-            </div>
-            <div class="card">
-                <h3>Self-Correcting</h3>
-                <p>Traces failed hypotheses to the exact flawed premise (Hinge Analysis) and records negative constraints.</p>
-            </div>
-            <div class="card">
-                <h3>Auditable</h3>
-                <p>Every claim carries confidence scores, independence metrics, and an unbroken chain of source URLs.</p>
-            </div>
-        </div>
-
-        <div class="arch-box">
-            <span class="section-label">Language Layer</span>
-            <h3>The Mouth (Bounded LLM Subroutine)</h3>
-            <p style="margin-bottom: 0;">A local open-weights language model that formats structured outputs into scientific prose. It does not reason, query the web, or decide what is true.</p>
-        </div>
-        <div class="arch-arrow">▼ passes through deterministic validation gates ▼</div>
-        <div class="arch-box">
-            <span class="section-label">Authority Layer</span>
-            <h3>The Brain: Deterministic Neuro-Symbolic Orchestration</h3>
-            <p style="margin-bottom: 0;">A Python, SQLite, and Z3 constraint-solving pipeline holds all logic, corroboration, and memory writes. Nothing enters the knowledge base without passing it.</p>
-        </div>
-        <div class="arch-arrow">▼</div>
-        <div class="arch-box">
-            <span class="section-label">Memory Layer</span>
-            <h3>Encrypted, Source-Linked Knowledge (<code style="color: var(--accent);">sovereign.db</code>)</h3>
-            <p style="margin-bottom: 0;">Verified multi-source facts are strictly isolated from unverified claims and candidate hypotheses. Predictions are never treated as evidence.</p>
-        </div>
+<section id="how">
+  <div class="wrap">
+    <div class="kicker reveal">Rigor by Design</div>
+    <h2 class="reveal">Four checks between a claim and <span class="g">a conclusion.</span></h2>
+    <div class="steps">
+      <div class="step reveal"><div class="dot">1</div><h3>Epistemic Gate</h3><p>All external information starts as unverified until classified and scored.</p></div>
+      <div class="step reveal"><div class="dot">2</div><h3>Rule of Three</h3><p>A claim becomes knowledge only after three independent sources corroborate it.</p></div>
+      <div class="step reveal"><div class="dot">3</div><h3>RedTeam Critic</h3><p>Hypotheses are scored adversarially on clarity, method, statistical power, and novelty.</p></div>
+      <div class="step reveal"><div class="dot">4</div><h3>Hinge Analysis</h3><p>Failures are traced to the exact assumption that broke, then logged so it is not repeated.</p></div>
     </div>
+    <p class="lead reveal" style="margin:54px auto 0;text-align:center">Predictions are never treated as evidence. Hypotheses stay hypotheses until the world confirms them.</p>
+  </div>
 </section>
 
-<!-- Offerings (Aligned with Autonomous Catalog Model) -->
-<section id="offerings">
-    <div class="container">
-        <span class="section-label">Offerings</span>
-        <h2>Three ways to work with us.</h2>
-
-        <div class="grid-3">
-            <div class="card">
-                <span class="section-label">01</span>
-                <h3>Domain Discovery Subscriptions</h3>
-                <p>Universities, hospital departments, and biotech R&amp;D teams receive continuous feeds of newly minted hypotheses in their target disciplines, with 30-day first-look exclusivity options.</p>
-            </div>
-            <div class="card">
-                <span class="section-label">02</span>
-                <h3>Validated Hypothesis Licensing</h3>
-                <p>Browse our searchable catalog by domain and date. License complete dossiers—including experimental design, statistical power analysis, and full provenance logs—for grants or R&amp;D.</p>
-            </div>
-            <div class="card">
-                <span class="section-label">03</span>
-                <h3>Institutional Vault API</h3>
-                <p>Integrate Episteme's audited discovery feed directly into university research development portals and pharmaceutical scouting workflows.</p>
-            </div>
-        </div>
-
-        <div style="margin-top: 2.5rem; text-align: center;">
-            <a href="catalog.html" class="btn btn-primary">Explore Live Discovery Catalog</a>
-        </div>
+<section id="offer" style="background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <div class="kicker reveal">Offerings</div>
+    <h2 class="reveal">Three ways to work <span class="g">with us.</span></h2>
+    <div class="grid g3">
+      <div class="card reveal">
+        <span class="num">01</span>
+        <h3>Priority Hypothesis Access</h3>
+        <p>Partners receive a regular digest of novel hypotheses in their domain, with right of first refusal on any they wish to pursue. Published work cites Episteme and Cognitive Arq Labs.</p>
+      </div>
+      <div class="card reveal">
+        <span class="num">02</span>
+        <h3>Research-as-a-Service</h3>
+        <p>Submit a question or an open domain. Receive structured hypotheses, supporting evidence, a Stage 1 manuscript outline, and complete reasoning logs.</p>
+      </div>
+      <div class="card reveal">
+        <span class="num">03</span>
+        <h3>Institutional Platform</h3>
+        <p>A subscription platform for filtering hypotheses by domain and confidence, inspecting provenance, and integrating through an API. In development.</p>
+      </div>
     </div>
+    <div class="grid g4" style="margin-top:22px">
+      <div class="card reveal"><span class="num">TARGET</span><p>Universities, research hospitals, and national labs</p></div>
+      <div class="card reveal"><span class="num">TARGET</span><p>Pharmaceutical and biotech R&amp;D</p></div>
+      <div class="card reveal"><span class="num">TARGET</span><p>Materials science and chemistry</p></div>
+      <div class="card reveal"><span class="num">TARGET</span><p>AI research labs and meta-research</p></div>
+    </div>
+  </div>
 </section>
 
-<!-- Team -->
-<section id="team">
-    <div class="container">
-        <span class="section-label">Leadership</span>
-        <h2>Built from first principles.</h2>
-
-        <div class="grid-3">
-            <div class="card">
-                <span class="section-label">Founder &amp; Lead Architect</span>
-                <h3>Jason Gabriel Davis</h3>
-                <p>Designed Episteme and the DNSO architecture from the ground up, bringing 40+ years of experience in cybersecurity, systems programming, and hardware engineering.</p>
-            </div>
-            <div class="card">
-                <span class="section-label">Medical Advisor</span>
-                <h3>Silvia Dorantes Garcia, MD</h3>
-                <p>Family Medicine. Provides clinical validation and access to a network of medical professionals for biomedical hypothesis review.</p>
-            </div>
-            <div class="card">
-                <span class="section-label">Charter Principles</span>
-                <h3>Ethical Safeguards</h3>
-                <p>Episteme will not be weaponized, used for surveillance, or deployed in ways that violate human rights.</p>
-            </div>
-        </div>
+<section id="roadmap">
+  <div class="wrap">
+    <div class="kicker reveal">Roadmap</div>
+    <h2 class="reveal">From proof of concept to <span class="g">global research infrastructure.</span></h2>
+    <div class="road">
+      <div class="rm reveal"><small>Now</small><h3>Proof of concept</h3><p>Episteme operating on consumer hardware, with a growing verified knowledge base across 24 domains.</p></div>
+      <div class="rm reveal"><small>Phase 1</small><h3>Foundation and pilots</h3><p>Dedicated GPU infrastructure, full-precision operation, and 2 to 3 pilot partnerships with universities or research hospitals.</p></div>
+      <div class="rm reveal"><small>Phase 2</small><h3>Commercial launch</h3><p>Pilots convert to paying partners. First peer-reviewed publication citing Episteme.</p></div>
+      <div class="rm reveal"><small>Phase 3</small><h3>Platform</h3><p>Public institutional platform and expansion into physics, materials, and mathematics.</p></div>
+      <div class="rm reveal"><small>Phase 4+</small><h3>Personal cognition</h3><p>A private, on-device cognitive partner, with hardware partnerships for pre-installed deployment.</p></div>
     </div>
+  </div>
+</section>
+
+<section id="team" style="background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+    <div class="kicker reveal">Leadership</div>
+    <h2 class="reveal">Built from <span class="g">first principles.</span></h2>
+    <div class="founder reveal">
+      <div class="avatar">
+        <picture>
+          <source srcset="jason-davis.webp" type="image/webp">
+          <img src="jason-davis.png" alt="Jason Gabriel Davis, Founder and Lead Architect" width="520" height="520" loading="lazy">
+        </picture>
+      </div>
+      <div>
+        <h3>Jason Gabriel Davis</h3>
+        <div class="role">Founder &amp; Lead Architect</div>
+        <p>Jason designed Episteme and the DNSO architecture from the ground up. His approach is that rigor should come from structure rather than scale, so the system stays verifiable, private, and efficient enough to run on modest hardware.</p>
+      </div>
+    </div>
+    <div class="grid g2" style="margin-top:44px">
+      <div class="card reveal"><span class="num">MEDICAL ADVISOR</span><h3>Silvia Dorantes Garcia, MD</h3><p>Family Medicine. Provides clinical validation and access to a network of medical professionals for hypothesis review.</p></div>
+      <div class="card reveal"><span class="num">PRINCIPLES</span><h3>Written into the charter</h3><p>Episteme will not be weaponized, used for surveillance, or deployed in ways that violate human rights.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div class="kicker">Get in Touch</div>
+    <h2>Help shape what <span class="g">comes next.</span></h2>
+    <p class="lead">We are seeking strategic research partners and seed investment to take Episteme from proof of concept to a global research platform.</p>
+    <div class="cta" style="justify-content:center">
+      <a class="btn btn-p" id="contact-btn" href="#">Contact Us</a>
+    </div>
+  </div>
 </section>
 
 <footer>
-    Cognitive Arq Labs · Episteme™ Deterministic Discovery Architecture © 2026 Jason Gabriel Davis. All rights reserved. · <a href="mailto:davis.jason.g@gmail.com">Contact</a>
+  <div class="wrap foot">
+    <span>Cognitive Arq Labs &middot; Episteme&trade; Artificial Cognitive Process</span>
+    <span>&copy; 2026 Jason Gabriel Davis. All rights reserved. &middot; <a id="footer-contact" href="#" style="text-decoration:none">Contact</a></span>
+  </div>
 </footer>
 
 <script>
-    if (localStorage.getItem('arq_logged_in') === 'true') {
-        const btn = document.getElementById('navAuthBtn');
-        btn.textContent = 'Researcher Portal (Active)';
-        btn.classList.remove('btn-outline');
-        btn.classList.add('btn-emerald');
-    }
+(function(){
+  // contact link, assembled to deter scrapers
+  var link="mai"+"lto:"+"davis.jason.g"+"@"+"gmail.com";
+  ["contact-btn","footer-contact"].forEach(function(id){var e=document.getElementById(id);if(e)e.href=link;});
+
+  // nav background on scroll
+  var nav=document.getElementById("nav");
+  function sc(){nav.classList.toggle("scrolled",window.scrollY>30)}
+  sc();window.addEventListener("scroll",sc,{passive:true});
+
+  // reveal on scroll
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}})},{threshold:.12});
+  document.querySelectorAll(".reveal").forEach(function(el){io.observe(el)});
+
+  // card spotlight
+  document.querySelectorAll(".card").forEach(function(c){
+    c.addEventListener("mousemove",function(e){var r=c.getBoundingClientRect();c.style.setProperty("--mx",((e.clientX-r.left)/r.width*100)+"%")});
+  });
+
+  // neural network background
+  var cv=document.getElementById("net"),ctx=cv.getContext("2d"),W,H,P=[],reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function size(){var d=window.devicePixelRatio||1;W=cv.clientWidth;H=cv.clientHeight;cv.width=W*d;cv.height=H*d;ctx.setTransform(d,0,0,d,0,0);
+    var n=Math.min(70,Math.floor(W*H/18000));P=[];for(var i=0;i<n;i++)P.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25});}
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    for(var i=0;i<P.length;i++){var p=P[i];
+      if(!reduce){p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;}
+      for(var j=i+1;j<P.length;j++){var q=P[j],dx=p.x-q.x,dy=p.y-q.y,d=Math.sqrt(dx*dx+dy*dy);
+        if(d<140){ctx.strokeStyle="rgba(79,195,247,"+(0.18*(1-d/140))+")";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);ctx.stroke();}}
+      ctx.fillStyle="rgba(143,214,255,.7)";ctx.beginPath();ctx.arc(p.x,p.y,1.4,0,6.283);ctx.fill();}
+    if(!reduce)requestAnimationFrame(draw);
+  }
+  size();draw();window.addEventListener("resize",function(){size();if(reduce)draw()});
+})();
 </script>
 </body>
 </html>
